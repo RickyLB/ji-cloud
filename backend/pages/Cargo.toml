@@ -1,8 +1,11 @@
 [package]
 name = "ji-cloud-pages"
 version = "0.1.0"
-authors = ["dakom <david.komer@gmail.com>", "Chloe Ross <chloe@launchbadge.com>"]
-edition = "2018"
+authors = [
+    "dakom <david.komer@gmail.com>",
+    "Chloe Ross <chloe@launchbadge.com>",
+]
+edition = "2021"
 publish = false
 
 [dependencies]
@@ -10,9 +13,9 @@ actix-cors = "0.6.0-beta.2"
 actix-files = "0.6.0-beta.7"
 actix-web = "4.0.0-beta.9"
 
-anyhow = "1.0.44"
+anyhow = "1.0.64"
 askama = "0.10.5"
-core = { path = "../core" }
+ji_backend_core = { path = "../core" }
 dotenv = "0.15.0"
 env_logger = "0.9.0"
 listenfd = { version = "0.3.5", optional = true }
@@ -22,7 +25,7 @@ futures = "0.3.23"
 regex = "1.6.0"
 
 [features]
-default = ["listenfd", "core/listenfd"]
+default = ["listenfd", "ji_backend_core/listenfd"]
 
 [dependencies.serde]
 version = "1.0.130"

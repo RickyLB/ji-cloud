@@ -8,7 +8,7 @@ edition = "2018"
 
 [dependencies]
 shared = { path = "../../shared/rust" }
-legacy_transcode = { path = "../legacy-player/transcode", package="transcode" }
+legacy_transcode = { path = "../legacy-player/transcode", package = "transcode" }
 scan_fmt = "0.2.6"
 structopt = "0.3.25"
 simplelog = "0.11.1"
@@ -27,4 +27,4 @@ csv = "1.1.6"
 image = "0.23.14"
 flate2 = "1.0.22"
 uuid = { version = "0.8.2", features = ["serde", "v1"] }
-serde_with  = { version = "1.11.0", features = ["json", "macros"] }
+serde_with = { version = "1.11.0", features = ["json", "macros"] }

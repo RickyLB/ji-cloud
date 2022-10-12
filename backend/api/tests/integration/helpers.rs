@@ -1,7 +1,7 @@
 use std::{collections::HashSet, sync::Mutex};
 
 use chrono::{Duration, Utc};
-use core::settings::{JwkAudiences, RuntimeSettings};
+use ji_backend_core::settings::{JwkAudiences, RuntimeSettings};
 use ji_cloud_api::http::Application;
 use rand::Rng;
 use shared::config::RemoteTarget;
@@ -149,7 +149,7 @@ pub async fn initialize_server_and_get_db(
     fixtures: &[Fixture],
     services: &[Service],
 ) -> (Application, PgPool) {
-    let _ = dotenv::dotenv().ok();
+    let _ = dotenvy::dotenv().ok();
 
     log_init();
     let jwk_verifier = ji_cloud_api::jwk::create_verifier(JwkAudiences {

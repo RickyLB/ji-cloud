@@ -13,7 +13,7 @@ pub(crate) mod resource;
 pub(crate) mod session;
 pub(crate) mod user;
 
-use core::config::DB_POOL_CONNECTIONS;
+use ji_backend_core::config::DB_POOL_CONNECTIONS;
 use shared::domain::{
     category::CategoryId,
     jig::JigId,

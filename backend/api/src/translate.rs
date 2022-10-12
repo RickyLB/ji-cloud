@@ -1,6 +1,6 @@
 use anyhow::Context;
-use core::settings::RuntimeSettings;
 use futures::TryStreamExt;
+use ji_backend_core::settings::RuntimeSettings;
 use reqwest::{self};
 use serde::{Deserialize, Serialize};
 use serde_json::json;
@@ -759,7 +759,7 @@ pub async fn multi_translation(
     Ok(Some(translation_list))
 }
 
-// #[actix_rt::test]
+// #[sqlx::test]
 // async fn test_translated_description() -> anyhow::Result<()> {
 //     let api_key: &str = "";
 

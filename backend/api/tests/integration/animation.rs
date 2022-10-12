@@ -1,3 +1,4 @@
+extern crate actix_rt;
 use http::StatusCode;
 use serde_json::json;
 use shared::domain::{animation::AnimationId, CreateResponse};

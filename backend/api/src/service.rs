@@ -9,7 +9,7 @@ use crate::algolia;
 use crate::error;
 use crate::error::ServiceKind;
 use crate::translate;
-use core::google::GoogleAccessTokenResponse;
+use ji_backend_core::google::GoogleAccessTokenResponse;
 
 use self::translate::GoogleTranslate;
 use self::upload::cleaner::UploadCleaner;
@@ -107,7 +107,6 @@ impl<T: Service + ?Sized> From<Arc<T>> for ServiceData<T> {
 impl<T: Service + ?Sized + 'static> FromRequest for ServiceData<T> {
     type Future = Ready<Result<Self, Self::Error>>;
     type Error = error::Service;
-    type Config = ();
 
     #[inline]
     fn from_request(req: &actix_web::HttpRequest, _: &mut actix_http::Payload) -> Self::Future {
@@ -214,7 +213,8 @@ impl GcpAccessKeyStore {
 
         drop(key_handler);
 
-        let token_response = core::google::get_google_token_response_from_metadata_server().await?;
+        let token_response =
+            ji_backend_core::google::get_google_token_response_from_metadata_server().await?;
 
         (*self.0.write().await).update(
             token_response

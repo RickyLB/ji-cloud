@@ -12,9 +12,8 @@
 #![warn(clippy::useless_let_if_seq)]
 
 use std::thread;
-
 use anyhow::Context;
-use core::{
+use ji_backend_core::{
     env::env_bool,
     settings::{self, SettingsManager},
 };
@@ -25,7 +24,7 @@ use ji_cloud_api::{algolia, db, http, jwk, logger, service, translate};
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
-    let _ = dotenv::dotenv().ok();
+    let _ = dotenvy::dotenv().ok();
 
     logger::init()?;
 
