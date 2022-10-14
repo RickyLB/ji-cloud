@@ -1,4 +1,5 @@
 use http::StatusCode;
+use reqwest::header::CONTENT_TYPE;
 use serde_json::json;
 use shared::domain::category::{
     CategoryTreeScope, CreateCategoryRequest, GetCategoryRequest, NewCategoryResponse,
@@ -14,24 +15,51 @@ use crate::{
 async fn create() -> anyhow::Result<()> {
     let app = initialize_server(&[Fixture::User], &[]).await;
 
+    println!("app started");
+
     let port = app.port();
 
     let client = reqwest::Client::new();
 
-    let resp = client
-        .post(&format!("http://0.0.0.0:{}/v1/category", port))
-        .login()
-        .json(&CreateCategoryRequest {
-            name: "One".to_owned(),
-            parent_id: None,
-        })
-        .send()
-        .await?
-        .error_for_status()?;
+    println!("Client: {:?}, Port: {port}", client);
 
-    assert_eq!(resp.status(), StatusCode::CREATED);
+    let resp = client.post(&format!("http://0.0.0.0:{}/v1/category", port));
+    println!(
+        "post 
+    {:?}",
+        resp
+    );
 
-    let _body: NewCategoryResponse = resp.json().await?;
+    let resp2 = resp.login();
+
+    println!(
+        "login
+     {:?}",
+        resp2
+    );
+
+    let resp3 = resp2.json(&CreateCategoryRequest {
+        name: "One".to_owned(),
+        parent_id: None,
+    });
+
+    println!(
+        "body
+    {:?}",
+        resp3
+    );
+
+    let resp4 = resp3.send().await?;
+
+    println!(
+        "send
+    {:?}",
+        resp4
+    );
+
+    assert_eq!(resp4.status(), StatusCode::CREATED);
+
+    let _body: NewCategoryResponse = resp4.json().await?;
 
     app.stop(false).await;
 
@@ -41,13 +69,13 @@ async fn create() -> anyhow::Result<()> {
 #[actix_rt::test]
 async fn get() -> anyhow::Result<()> {
     let app = initialize_server(&[Fixture::User, Fixture::CategoryOrdering], &[]).await;
-
+    println!("app started");
     let port = app.port();
 
-    let client = reqwest::Client::new();
-
+    let client = reqwest::Client::builder().build()?;
+    println!("Client: {:?}, Port: {port}", client);
     let resp = client
-        .get(&format!("http://0.0.0.0:{}/v1/category", port))
+        .get(&format!("https://0.0.0.0:{}/v1/category", port))
         .login()
         .send()
         .await?

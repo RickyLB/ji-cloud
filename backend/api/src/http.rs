@@ -3,7 +3,7 @@ use std::{net::TcpListener, sync::Arc};
 use actix_service::Service;
 use actix_web::{
     body::MessageBody,
-    dev::{Server, ServerHandle, ServiceRequest, ServiceResponse},
+    dev::{Server, ServiceRequest, ServiceResponse},
     error::Error,
     middleware::{Compat, Condition},
     web::{method, Data},

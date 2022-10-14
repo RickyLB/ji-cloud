@@ -64,6 +64,7 @@ pub async fn get_access_token_response_and_project_id(
             } else {
                 None
             };
+
             Ok((
                 GoogleAccessTokenResponse {
                     access_token,

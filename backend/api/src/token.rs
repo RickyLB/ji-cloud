@@ -157,7 +157,7 @@ pub fn create_auth_token(
 
 pub fn create_auth_token_no_cookie(
     token_secret: &[u8; 32],
-    valid_duration: Duration,
+    valid_duration: chrono::Duration,
     session: &str,
     csrf: String,
     now: DateTime<Utc>,

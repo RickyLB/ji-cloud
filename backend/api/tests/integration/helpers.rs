@@ -21,6 +21,8 @@ impl LoginExt for reqwest::RequestBuilder {
 
         let key = &**PASETO_KEY;
 
+        println!("inside");
+
         let token = ji_cloud_api::token::create_auth_token_no_cookie(
             key,
             Duration::minutes(10),
@@ -150,6 +152,8 @@ pub async fn initialize_server_and_get_db(
     services: &[Service],
 ) -> (Application, PgPool) {
     let _ = dotenvy::dotenv().ok();
+
+    println!("initialize");
 
     log_init();
     let jwk_verifier = ji_cloud_api::jwk::create_verifier(JwkAudiences {
