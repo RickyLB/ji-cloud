@@ -73,6 +73,9 @@ pub fn move_index(state: Rc<SpotState>, move_target: MoveTarget) {
                 SidebarSpotItem::Course(_) => {
                     course_actions::save_course(&state).await;
                 }
+                SidebarSpotItem::ProDev(_) => {
+                    pro_dev_actions::save_pro_dev(&state).await;
+                },
             }
         }
     }));
@@ -88,6 +91,9 @@ pub fn delete(state: Rc<SpotState>) {
             },
             SidebarSpotItem::Course(_) => {
                 course_actions::save_course(&state).await;
+            },
+            SidebarSpotItem::ProDev(_) => {
+                pro_dev_actions::save_pro_dev(&state).await;
             },
         }
     }));

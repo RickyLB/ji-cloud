@@ -1,4 +1,4 @@
-use crate::edit::sidebar::state::{CourseSpot, SidebarSpot, SidebarSpotItem};
+use crate::edit::sidebar::{state::{CourseSpot, SidebarSpot, SidebarSpotItem}, ProDevSpot};
 
 use super::super::state::Sidebar;
 use super::settings::JigSettings as SettingsState;
@@ -98,6 +98,10 @@ pub fn on_iframe_message(state: Rc<Sidebar>, message: ModuleToJigEditorMessage) 
                     SidebarSpotItem::Course(item) => item.as_ref().map(|item| match &**item {
                         CourseSpot::Cover(module) => module.id,
                         CourseSpot::Item(_) => unreachable!("Only modules should be here"),
+                    }),
+                    SidebarSpotItem::ProDev(item) => item.as_ref().map(|item| match &**item {
+                        ProDevSpot::Cover(module) => module.id,
+                        ProDevSpot::Item(_) => unreachable!("Only units should be here"),
                     }),
                 };
                 match current_module_id {

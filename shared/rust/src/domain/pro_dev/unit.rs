@@ -25,6 +25,7 @@ pub struct ProDevUnitId(pub Uuid);
 pub struct ProDevUnit {
     /// Unit Id
     pub id: ProDevUnitId,
+    
     /// Name for Pro Dev Unit
     pub display_name: String,
 

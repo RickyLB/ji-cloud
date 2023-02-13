@@ -181,7 +181,12 @@ impl Gallery {
                                             CourseEditRoute::Landing
                                         ))))
                                     },
-                                    Asset::ProDev(_) => todo!(),
+                                    Asset::ProDev(pro_dev) => {
+                                        String::from(Route::Asset(AssetRoute::Edit(AssetEditRoute::ProDev(
+                                            pro_dev.id,
+                                            ProDevEditRoute::Landing
+                                        ))))
+                                    },
 
                                 }
                             })

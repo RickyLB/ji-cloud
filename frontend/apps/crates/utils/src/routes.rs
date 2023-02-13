@@ -1,4 +1,4 @@
-use crate::asset::{CoursePlayerOptions, JigPlayerOptions};
+use crate::asset::{CoursePlayerOptions, JigPlayerOptions, ProDevPlayerOptions};
 use serde::{Deserialize, Serialize};
 use shared::domain::{
     asset::{AssetId, AssetType, DraftOrLive},
@@ -11,7 +11,7 @@ use shared::domain::{
     module::{ModuleId, ModuleKind},
     resource::ResourceId,
     session::OAuthUserProfile,
-    user::{UserId, UserScope},
+    user::{UserId, UserScope}, pro_dev::{ProDevId, unit::ProDevUnitId},
 };
 use std::{
     fmt::{Debug, Display},
@@ -218,6 +218,7 @@ pub enum AssetRoute {
     JigGallery,
     CourseGallery,
     ResourceGallery,
+    ProDevGallery,
     /// Here for compatibility reasons, can probably go away in a few months
     // RedirectToJig(String),
     Edit(AssetEditRoute),
@@ -229,6 +230,7 @@ pub enum AssetEditRoute {
     Jig(JigId, JigEditRoute),
     Resource(ResourceId, ResourceEditRoute),
     Course(CourseId, CourseEditRoute),
+    ProDev(ProDevId, ProDevEditRoute)
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -251,10 +253,19 @@ pub enum CourseEditRoute {
     Publish,
 }
 
+#[derive(Debug, Clone, PartialEq)]
+pub enum ProDevEditRoute {
+    Landing,
+    Cover(ModuleId),
+    Unit(ProDevUnitId),
+    Publish,
+}
+
 #[derive(Debug, Clone)]
 pub enum AssetPlayRoute {
     Jig(JigId, Option<ModuleId>, JigPlayerOptions),
     Course(CourseId, CoursePlayerOptions),
+    ProDev(ProDevId, ProDevPlayerOptions),
 }
 
 #[derive(Debug, Clone)]
@@ -434,6 +445,7 @@ impl Route {
             ["asset", "edit", "jig-gallery"] => Self::Asset(AssetRoute::JigGallery),
             ["asset", "edit", "course-gallery"] => Self::Asset(AssetRoute::CourseGallery),
             ["asset", "edit", "resource-gallery"] => Self::Asset(AssetRoute::ResourceGallery),
+            ["asset", "edit", "pro-dev-gallery"] => Self::Asset(AssetRoute::ProDevGallery),
             ["asset", "edit", "jig", jig_id, "publish"] => {
                 Self::Asset(AssetRoute::Edit(AssetEditRoute::Jig(
                     JigId(Uuid::from_str(jig_id).unwrap_ji()),
@@ -490,6 +502,27 @@ impl Route {
                 Self::Asset(AssetRoute::Edit(AssetEditRoute::Course(
                     CourseId(Uuid::from_str(course_id).unwrap_ji()),
                     CourseEditRoute::Cover(ModuleId(Uuid::from_str(cover_id).unwrap_ji())),
+                )))
+            }
+            ["asset", "edit", "pro-dev", pro_dev_id, "publish"] => {
+                Self::Asset(AssetRoute::Edit(AssetEditRoute::ProDev(
+                    ProDevId(Uuid::from_str(pro_dev_id).unwrap_ji()),
+                    ProDevEditRoute::Publish,
+                )))
+            }
+            ["asset", "edit", "pro-dev", "debug"] => Self::Asset(AssetRoute::Edit(
+                AssetEditRoute::ProDev(ProDevId(Uuid::from_u128(0)), ProDevEditRoute::Landing),
+            )),
+            ["asset", "edit", "pro-dev", pro_dev_id] => {
+                Self::Asset(AssetRoute::Edit(AssetEditRoute::ProDev(
+                    ProDevId(Uuid::from_str(pro_dev_id).unwrap_ji()),
+                    ProDevEditRoute::Landing,
+                )))
+            }
+            ["asset", "edit", "pro-dev", pro_dev_id, "cover", cover_id] => {
+                Self::Asset(AssetRoute::Edit(AssetEditRoute::ProDev(
+                    ProDevId(Uuid::from_str(pro_dev_id).unwrap_ji()),
+                    ProDevEditRoute::Cover(ModuleId(Uuid::from_str(cover_id).unwrap_ji())),
                 )))
             }
             ["asset", "play", "jig", "debug"] => {
@@ -709,6 +742,7 @@ impl From<&Route> for String {
                 AssetRoute::JigGallery => "/asset/edit/jig-gallery".to_string(),
                 AssetRoute::CourseGallery => "/asset/edit/course-gallery".to_string(),
                 AssetRoute::ResourceGallery => "/asset/edit/resource-gallery".to_string(),
+                AssetRoute::ProDevGallery => "/asset/edit/pro-dev-gallery".to_string(),
                 AssetRoute::Edit(route) => match route {
                     AssetEditRoute::Jig(jig_id, route) => match route {
                         JigEditRoute::Landing => {
@@ -743,6 +777,20 @@ impl From<&Route> for String {
                             format!("/asset/edit/course/{}/publish", course_id.0)
                         }
                     },
+                    AssetEditRoute::ProDev(pro_dev_id, route) => match route {
+                        ProDevEditRoute::Landing => {
+                            format!("/asset/edit/pro-dev/{}", pro_dev_id.0)
+                        }
+                        ProDevEditRoute::Cover(cover_id) => {
+                            format!("/asset/edit/pro-dev/{}/cover/{}", pro_dev_id.0, cover_id.0)
+                        }
+                        ProDevEditRoute::Unit(cover_id) => {
+                            format!("/asset/edit/pro-dev/{}/cover/{}", pro_dev_id.0, cover_id.0)
+                        }
+                        ProDevEditRoute::Publish => {
+                            format!("/asset/edit/pro-dev/{}/publish", pro_dev_id.0)
+                        }
+                    },
                 },
                 AssetRoute::Play(route) => match route {
                     AssetPlayRoute::Jig(jig_id, module_id, player_settings) => {
@@ -756,6 +804,10 @@ impl From<&Route> for String {
                     AssetPlayRoute::Course(course_id, player_settings) => {
                         let query = serde_qs::to_string(&player_settings).unwrap_ji();
                         format!("/asset/play/course/{}?{}", course_id.0, query)
+                    }
+                    AssetPlayRoute::ProDev(pro_dev_id, player_settings) => {
+                        let query = serde_qs::to_string(&player_settings).unwrap_ji();
+                        format!("/asset/play/course/{}?{}", pro_dev_id.0, query)
                     }
                 },
             },

@@ -8,7 +8,7 @@ use crate::edit::sidebar::{jig::actions::get_player_settings, state::SidebarSett
 
 use super::super::{actions as sidebar_actions, state::Sidebar as SidebarState};
 use utils::{
-    asset::{AssetPlayerOptions, CoursePlayerOptions},
+    asset::{AssetPlayerOptions, CoursePlayerOptions, ProDevPlayerOptions},
     prelude::*,
 };
 
@@ -38,6 +38,9 @@ impl HeaderDom {
                         dom.child(settings.render())
                     },
                     SidebarSetting::Course(settings) => {
+                        dom.child(settings.render())
+                    },
+                    SidebarSetting::ProDev(settings) => {
                         dom.child(settings.render())
                     },
                 }
@@ -108,6 +111,14 @@ impl HeaderDom {
                                     is_student: false
                                 };
                                 let settings = AssetPlayerOptions::Course(settings);
+                                asset_edit_state.play_jig.set(Some(settings));
+                            }
+                            SidebarSetting::ProDev(_pro_dev) => {
+                                let settings = ProDevPlayerOptions {
+                                    draft_or_live: DraftOrLive::Draft,
+                                    is_student: false
+                                };
+                                let settings = AssetPlayerOptions::ProDev(settings);
                                 asset_edit_state.play_jig.set(Some(settings));
                             }
                         }

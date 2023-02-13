@@ -222,6 +222,15 @@ pub struct CoursePlayerOptions {
     pub is_student: bool,
 }
 
+#[derive(Serialize, Deserialize, Clone, Debug, Default)]
+pub struct ProDevPlayerOptions {
+    #[serde(default)]
+    pub draft_or_live: DraftOrLive,
+
+    #[serde(default)]
+    pub is_student: bool,
+}
+
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub enum AssetPlayerOptions {
     Jig(JigPlayerOptions),

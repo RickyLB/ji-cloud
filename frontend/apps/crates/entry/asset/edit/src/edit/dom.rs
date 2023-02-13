@@ -3,7 +3,7 @@ use std::rc::Rc;
 use super::{
     super::edit::publish::Publish, course::course_selection::state::CourseSelection,
     jig::module_selection::ModuleSelection, module_iframe::ModuleIframe, sidebar::Sidebar,
-    state::AssetEditState,
+    state::AssetEditState, unit_iframe::UnitIframe,
 };
 use components::{
     overlay::handle::OverlayHandle,
@@ -81,6 +81,23 @@ impl AssetEditState {
                                     Some(ModuleIframe::new(state.asset_id, cover_id).render())
                                 },
                                 CourseEditRoute::Publish => {
+                                    Some(Publish::new(Rc::clone(&state)).render())
+                                },
+                            }
+                        },
+                        AssetEditRoute::ProDev(pro_dev_id, pro_dev_edit_route) => {
+                            match pro_dev_edit_route {
+                                ProDevEditRoute::Landing => todo!(),
+                                // {
+                                //     Some(ProDevSelection::new(pro_dev_id, &state).render())
+                                // },
+                                ProDevEditRoute::Cover(cover_id) => {
+                                    Some(ModuleIframe::new(state.asset_id, cover_id).render())
+                                },
+                                ProDevEditRoute::Unit(unit_id) => {
+                                    Some(UnitIframe::new(pro_dev_id, unit_id).render())
+                                },
+                                ProDevEditRoute::Publish => {
                                     Some(Publish::new(Rc::clone(&state)).render())
                                 },
                             }
